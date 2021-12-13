@@ -1,19 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AssemblyName>Rksoftware.$(MSBuildProjectName)</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyName>Rksoftware.$(MSBuildProjectName)</AssemblyName>
+		<DebugType>none</DebugType>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
-  </ItemGroup>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>DotNetToolUpdateCheck</ToolCommandName>
+		<PackageOutputPath>./nupkg</PackageOutputPath>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageId>$(AssemblyName)</PackageId>
+		<Authors>Rksoftware</Authors>
+		<RootNamespace>Rksoftware.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+		<AssemblyVersion></AssemblyVersion>
+		<Version>$(VersionPrefix)0.1.0</Version>
+		<DebugType>none</DebugType>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DotNetToolUpdateCheckerCore\DotNetToolUpdateCheckerCore.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DotNetToolUpdateCheckerCore\DotNetToolUpdateCheckerCore.csproj" />
+	</ItemGroup>
 
 </Project>
