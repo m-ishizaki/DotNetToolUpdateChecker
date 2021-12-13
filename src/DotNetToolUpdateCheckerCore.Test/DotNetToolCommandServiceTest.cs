@@ -19,4 +19,14 @@ public class DotNetToolCommandServiceProcessServiceTests
 
         Assert.Pass();
     }
+
+    [Test]
+    public void Test2()
+    {
+        IProcessService process = new ProcessService();
+        IDotNetToolCommandService dotNetToolCommandService = new DotNetToolCommandService(process);
+        var result = dotNetToolCommandService.Search("rksoftware.imageresizeconsole");
+
+        Assert.Pass();
+    }
 }

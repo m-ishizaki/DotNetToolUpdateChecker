@@ -10,11 +10,14 @@ namespace Rksoftware.DotNetToolUpdateChecker.Services
     internal class DotNetToolCommandService : IDotNetToolCommandService
     {
         IProcessService processService;
+        
         public DotNetToolCommandService(IProcessService processService) => (this.processService) = (processService);
+
         public IReadOnlyList<ListResultModel> List()
         {
             var gResults = ToModels(processService.Start("dotnet tool list -g"));
             var lResults = ToModels(processService.Start("dotnet tool list --local"));
+
             return Enumerable.Concat(gResults, lResults).ToArray();
 
             static ListResultModel[] ToModels(string result)
@@ -22,6 +25,7 @@ namespace Rksoftware.DotNetToolUpdateChecker.Services
                 var results = result?.Split(Environment.NewLine).Skip(2).Where(line => !string.IsNullOrWhiteSpace(line)).Select(ToModel).ToArray();
                 return results ?? Array.Empty<ListResultModel>();
             }
+
             static ListResultModel ToModel(string line)
             {
                 var values = line.Split(" ").Where(value => !string.IsNullOrEmpty(value)).ToArray();
@@ -36,7 +40,19 @@ namespace Rksoftware.DotNetToolUpdateChecker.Services
 
         public SearchResultModel Search(string packageId)
         {
-            throw new NotImplementedException();
+            var result = processService.Start($"dotnet tool search --detail {packageId}");
+
+            var lines = result?.Split(Environment.NewLine).Skip(2).ToArray();
+            SearchResultModel model = new(
+                new Version(lines.FirstOrDefault("").Split(' ').LastOrDefault("")),
+                lines.Skip(1).FirstOrDefault("").Split(' ').LastOrDefault(""),
+                lines.Skip(2).FirstOrDefault("").Split(' ').LastOrDefault(""),
+                int.TryParse(lines.Skip(3).FirstOrDefault("").Split(' ').LastOrDefault(""), out var download) ? download : default,
+                bool.TryParse(lines.Skip(4).FirstOrDefault("").Split(' ').LastOrDefault(""), out var verified) ? verified : default,
+                lines.Skip(5).FirstOrDefault("").Split(' ').LastOrDefault(""),
+                Array.Empty<Version>()
+                );
+            return model;
         }
     }
 }
