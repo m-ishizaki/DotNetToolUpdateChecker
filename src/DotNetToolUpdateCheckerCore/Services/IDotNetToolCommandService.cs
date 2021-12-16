@@ -9,7 +9,7 @@ namespace Rksoftware.DotNetToolUpdateChecker.Services;
 
 internal interface IDotNetToolCommandService
 {
-    IReadOnlyList<ListResultModel> List();
+    IEnumerable<ListResultModel> List();
     SearchResultModel Search(string packageId);
 }
 

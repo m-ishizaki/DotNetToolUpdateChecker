@@ -10,20 +10,20 @@ namespace Rksoftware.DotNetToolUpdateChecker.Services
     internal class DotNetToolCommandService : IDotNetToolCommandService
     {
         IProcessService processService;
-        
+
         public DotNetToolCommandService(IProcessService processService) => (this.processService) = (processService);
 
-        public IReadOnlyList<ListResultModel> List()
+        public IEnumerable<ListResultModel> List()
         {
-            var gResults = ToModels(processService.Start("dotnet tool list -g"));
-            var lResults = ToModels(processService.Start("dotnet tool list --local"));
+            foreach(var result in ToModels(processService.Start("dotnet tool list -g"))) yield return result;
+            foreach (var result in ToModels(processService.Start("dotnet tool list --local"))) yield return result;
 
-            return Enumerable.Concat(gResults, lResults).ToArray();
-
-            static ListResultModel[] ToModels(string result)
+            static IEnumerable<ListResultModel> ToModels(string result)
             {
-                var results = result?.Split(Environment.NewLine).Skip(2).Where(line => !string.IsNullOrWhiteSpace(line)).Select(ToModel).ToArray();
-                return results ?? Array.Empty<ListResultModel>();
+                var results = result?.Split(Environment.NewLine).Skip(2).Where(line => !string.IsNullOrWhiteSpace(line)).Select(ToModel);
+                if (results != null)
+                    foreach (var line in results)
+                        yield return line;
             }
 
             static ListResultModel ToModel(string line)

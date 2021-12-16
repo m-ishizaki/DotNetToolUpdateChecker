@@ -8,5 +8,5 @@ namespace Rksoftware.DotNetToolUpdateChecker.Services;
 
 internal interface IUpdateCheckService
 {
-    string Check();
+    IEnumerable<string> Check();
 }

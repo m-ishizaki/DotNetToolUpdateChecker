@@ -14,8 +14,8 @@ internal class UpdateCheckConsoleService : IUpdateCheckConsoleService
 
     public void CheckAndOutput()
     {
-        var result = updateCheckService.Check();
-        Console.WriteLine(result);
+        foreach (var result in updateCheckService.Check())
+            Console.WriteLine(result);
     }
 }
 

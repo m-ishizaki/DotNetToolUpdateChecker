@@ -13,12 +13,13 @@ internal class UpdateCheckService : IUpdateCheckService
     public UpdateCheckService(IDotNetToolCommandService dotNetToolCommandService) => (this.dotNetToolCommandService) = (dotNetToolCommandService);
 
 
-    public string Check()
+    public IEnumerable<string> Check()
     {
-        var title = new[] { "Package ID\tCurrent\tLasted\tCommand"};
-        var lines = dotNetToolCommandService.List().Select(package => $"{package.PackageId}\t{package.Version}\t{dotNetToolCommandService.Search(package.PackageId).LatestVersion}\t{package.Command}");
-        var result = string.Join(Environment.NewLine, title.Concat(lines));
-        return result;
+        yield return "Current\tLatest\tCommand\t\tPackage ID";
+        yield return "----------------------------------------------------------------------";
+        foreach (var package in dotNetToolCommandService.List())
+            yield return $"{package.Version}\t{dotNetToolCommandService.Search(package.PackageId).LatestVersion}\t{package.Command}\t{package.PackageId}";
+        yield return Environment.NewLine;
     }
 }
 
