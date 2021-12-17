@@ -15,7 +15,7 @@ namespace Rksoftware.DotNetToolUpdateChecker.Services
 
         public IEnumerable<ListResultModel> List()
         {
-            foreach(var result in ToModels(processService.Start("dotnet tool list -g"))) yield return result;
+            foreach (var result in ToModels(processService.Start("dotnet tool list -g"))) yield return result;
             foreach (var result in ToModels(processService.Start("dotnet tool list --local"))) yield return result;
 
             static IEnumerable<ListResultModel> ToModels(string result)
@@ -42,7 +42,7 @@ namespace Rksoftware.DotNetToolUpdateChecker.Services
         {
             var result = processService.Start($"dotnet tool search --detail {packageId}");
 
-            var lines = result?.Split(Environment.NewLine).Skip(2).ToArray();
+            var lines = result?.Split(Environment.NewLine).Skip(2).ToArray() ?? new string[0];
             SearchResultModel model = new(
                 new Version(lines.FirstOrDefault("").Split(' ').LastOrDefault("")),
                 lines.Skip(1).FirstOrDefault("").Split(' ').LastOrDefault(""),

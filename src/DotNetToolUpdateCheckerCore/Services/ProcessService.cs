@@ -19,9 +19,9 @@ internal class ProcessService : IProcessService
             RedirectStandardOutput = true,
         };
         using var process = System.Diagnostics.Process.Start(info);
-        using var stream = process.StandardOutput;
-        var output = stream.ReadToEnd();
-        return output;
+        using var stream = process?.StandardOutput;
+        var output = stream?.ReadToEnd();
+        return output ?? "";
     }
 }
 
