@@ -30,7 +30,7 @@ internal class UpdateCheckService : IUpdateCheckService
         foreach (var package in list)
         {
             var detail = dotNetToolCommandService.Search(package.PackageId ?? "");
-            yield return $"{(package.PackageId??"").PadRight(packageIdLength)}\t{(package.Version?.ToString()??"").PadRight(titleCurrent.Length)}\t{(detail.LatestVersion?.ToString()??"").PadRight(titleLatest.Length)}\t{package.Command}";
+            yield return $"{(package.PackageId ?? "").PadRight(packageIdLength)}\t{(package.Version?.ToString() ?? "").PadRight(titleCurrent.Length)}\t{(detail.LatestVersion?.ToString() ?? "").PadRight(titleLatest.Length)}\t{package.Command}";
         }
         yield return Environment.NewLine;
     }
